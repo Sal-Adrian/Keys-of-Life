@@ -1,47 +1,25 @@
 import pygame.midi as md
 
 class Sounds:
-    def __init__(self, n):
+    def __init__(self, n, dist):
         self.n = n
         self.vol = 75
 
         # Create Scale
         mid = int(n / 2)
+        scale = [60]*n
+
+        j = mid-1
+        for i in range(mid):
+            scale[j] += dist*(i+1)
+            j -= 1
+
+        j = mid+1
         if(n % 2 == 0):
             mid -= 1
-
-        scale = [60]*n
-        note = 0
-        dist = 0
-        j = mid + 1
-        if(n % 2 == 0):
-            mid += 1
         for i in range(mid):
-            if(note > 4):
-                note = 0
-            if(note == 0 or note == 2):
-                dist += 3
-                scale[j] -= dist
-            else:
-                dist += 2
-                scale[j] -= dist
+            scale[j] -= dist*(i+1)
             j += 1
-            note += 1
-        
-        note = 0
-        dist = 0
-        j = mid - 1
-        for i in range(mid):
-            if(note > 4):
-                note = 0
-            if(note == 2 or note == 4):
-                dist += 3
-                scale[j] += dist
-            else:
-                dist += 2
-                scale[j] += dist
-            j -= 1
-            note += 1
 
         self.scale = scale
         md.init()

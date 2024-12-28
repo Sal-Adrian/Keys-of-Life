@@ -97,7 +97,7 @@ def submitSize(x):
         boardSize = val
         strSize.set(boardSize)
         buildBoard()
-        p = s.Sounds(boardSize)
+        p = s.Sounds(boardSize, dist)
         setInstr(instrBox.get())
 
 def submitBPM(x):
@@ -107,7 +107,7 @@ def submitBPM(x):
     except ValueError:
         return
 
-    # I arbitrarily chose 300 as max
+    # Arbitrarily set max to 300
     if(val > 0 and val <= 300):
         timeStep = int(60000 / val)
         strBPM.set(val)
@@ -119,7 +119,7 @@ def submitNum(x):
     except ValueError:
         return
     
-    if(val > -2 and val <= boardSize):
+    if(val >= -1 and val <= boardSize):
         numNotes = val
         strNum.set(val)
 
@@ -157,6 +157,24 @@ def randomBoard():
 def setInstr(e):
     p.setInstr(instrBox.get())
 
+def submitDist(x):
+    global dist
+    global p
+    try:
+        val = int(distField.get())
+    except ValueError:
+        return
+    
+    # Arbitrarily set max to 12
+    if(val >= 0 and val <= 12):
+        if(playing):
+            togglePlayer()
+        p.destroy()
+        dist = val
+        strDist.set(val)
+        p = s.Sounds(boardSize, dist)
+        setInstr(instrBox.get())
+
 
 
 if __name__ == '__main__':
@@ -168,7 +186,8 @@ if __name__ == '__main__':
     timeStep = 500  # 120 bpm
     numNotes = -1
 
-    p = s.Sounds(boardSize)
+    dist = 2
+    p = s.Sounds(boardSize, dist)
     
 
     root = tk.Tk()
@@ -318,6 +337,28 @@ if __name__ == '__main__':
     randomImg = ImageTk.PhotoImage(randomOG)
     randomBtn = tk.Button(btnFrame, image=randomImg, command=randomBoard)
     randomBtn.grid(row=0, column=3)
+
+
+    # More Entries
+    eFrame2 = tk.Frame(innerFrame, bg='#505050')
+    eFrame2.pack()
+
+    # GET string distance
+    strDist = tk.StringVar(eFrame2, 2)
+    distHeader = tk.Label(eFrame2, text="String Dist:", 
+        bg=foreColor, fg='#FFFFFF')
+    distField = tk.Entry(eFrame2, width=5, 
+        bg=foreColor, fg='#FFFFFF')
+    distBuffer = tk.Label(eFrame2, text=" | ", 
+        bg=foreColor, fg='#FFFFFF')
+    distLabel = tk.Label(eFrame2, textvariable=strDist, 
+        bg=foreColor, fg='#FFFFFF')
+
+    distHeader.grid(row=0, column=0)
+    distField.grid(row=0, column=1)
+    distBuffer.grid(row=0, column=2)
+    distLabel.grid(row=0, column=3)
+    distField.bind("<Return>", submitDist)
 
 
     
