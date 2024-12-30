@@ -35,7 +35,13 @@ def createNotes(n, dist, fret):
     for i in range(n):
         noteBoard.append([])
         for j in range(n):
-            noteBoard[i].append(strings[i] + fretboard[j])
+            note = strings[i] + fretboard[j]
+            if(note < 0):
+                noteBoard[i].append(0)
+            elif(note > 127):
+                noteBoard[i].append(127)
+            else:
+                noteBoard[i].append(strings[i] + fretboard[j])
 
     return noteBoard
 
