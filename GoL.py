@@ -54,7 +54,7 @@ def nextStep(board, n, numNotes, randMel):
             # Build newBoard
             if(board[i][j] == 1):
                 if(neighbors == 2 or neighbors == 3):
-                    newBoard[i].append(2)   # old face
+                    newBoard[i].append(1)
                     # playNotes[i] = j
                     # colCount[i] += 1
                     rowCount[-1] += 1
@@ -87,8 +87,8 @@ def nextStep(board, n, numNotes, randMel):
             while len(playNotes) > numNotes:
                     playNotes.pop(randrange(len(playNotes)))
 
-    # Set the notes that sing to 3
+    # Set the notes that sing to 2
     for i in playNotes:
-        newBoard[i[0]][i[1]] = 3
+        newBoard[i[0]][i[1]] = 2
 
     return newBoard

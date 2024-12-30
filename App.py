@@ -25,14 +25,11 @@ def loadBoard():
     for i in range(boardSize):
         for j in range(boardSize):
             if(bitBoard[i][j] == 0):
-                board[i][j].config(image=sleepImg)
+                board[i][j].config(image=blackImg)
             elif(bitBoard[i][j] == 1):
-                board[i][j].config(image=smileImg)
-            elif(bitBoard[i][j] == 2):
-                board[i][j].config(image=oldImg)
-                bitBoard[i][j] = 1
+                board[i][j].config(image=whiteImg)
             else:
-                board[i][j].config(image=singImg)
+                board[i][j].config(image=blueImg)
                 bitBoard[i][j] = 1
                 chord.append([i,j])
 
@@ -42,29 +39,26 @@ def oneStep():
     loadBoard()
 
 def buildBoard():
-    global sleepImg
-    global smileImg
-    global singImg
-    global oldImg
+    global blackImg
+    global whiteImg
+    global blueImg
     chord.clear()
     
     # Format Images
     bW = int(400 / boardSize)
-    resizeSleep = sleepOG.resize((bW,bW))
-    sleepImg = ImageTk.PhotoImage(resizeSleep)
-    resizeSmile = smileOG.resize((bW,bW))
-    smileImg = ImageTk.PhotoImage(resizeSmile)
-    resizeSing = singOG.resize((bW,bW))
-    singImg = ImageTk.PhotoImage(resizeSing)
-    resizeOld = oldOG.resize((bW,bW))
-    oldImg = ImageTk.PhotoImage(resizeOld)
+    resizeBlack = blackOG.resize((bW,bW))
+    blackImg = ImageTk.PhotoImage(resizeBlack)
+    resizeWhite = whiteOG.resize((bW,bW))
+    whiteImg = ImageTk.PhotoImage(resizeWhite)
+    resizeBlue = blueOG.resize((bW,bW))
+    blueImg = ImageTk.PhotoImage(resizeBlue)
 
     for i in range(boardSize):
         bitBoard.append([])
         board.append([])
         for j in range(boardSize):
             bitBoard[i].append(0)
-            board[i].append( tk.Button(gFrame, image=sleepImg, 
+            board[i].append( tk.Button(gFrame, image=blackImg,
                 command=lambda a=i, b=j : toggleFace(a,b)) )
             board[i][j].grid(row=i, column=j)
 
@@ -123,10 +117,10 @@ def submitNum(x):
 
 def toggleFace(i, j):
     if(bitBoard[i][j] == 0):
-        board[i][j].config(image=smileImg)
+        board[i][j].config(image=whiteImg)
         bitBoard[i][j] = 1
     else:
-        board[i][j].config(image=sleepImg)
+        board[i][j].config(image=blackImg)
         bitBoard[i][j] = 0
 
 def togglePlayer():
@@ -311,10 +305,9 @@ if __name__ == '__main__':
     gFrame.pack()
 
     # Open images for tiles
-    sleepOG = Image.open('Images/sleep.jpg')
-    smileOG = Image.open('Images/smiles.jpg')
-    singOG = Image.open('Images/sing.jpg')
-    oldOG = Image.open('Images/old.jpg')
+    blackOG = Image.open('Images/black.jpg')
+    whiteOG = Image.open('Images/white.jpg')
+    blueOG = Image.open('Images/blue.jpg')
 
     # Build game board
     bitBoard = []
