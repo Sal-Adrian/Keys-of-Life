@@ -1,54 +1,61 @@
 import pygame.midi as md
 
+def createNotes(n, dist, fret):
+    # Create strings
+    mid = int(n / 2)
+    strings = [60]*n
+
+    j = mid-1
+    for i in range(mid):
+        strings[j] += dist*(i+1)
+        j -= 1
+
+    j = mid+1
+    if(n % 2 == 0):
+        mid -= 1
+    for i in range(mid):
+        strings[j] -= dist*(i+1)
+        j += 1
+
+    # Create Fretboard
+    fretboard = [0]*n
+    j = mid-1
+    for i in range(mid):
+        fretboard[j] -= fret*(i+1)
+        j -= 1
+    
+    j = mid+1
+    if(n % 2 == 0):
+        mid += 1
+    for i in range(mid):
+        fretboard[j] += fret*(i+1)
+        j += 1
+    
+    noteBoard = []
+    for i in range(n):
+        noteBoard.append([])
+        for j in range(n):
+            noteBoard[i].append(strings[i] + fretboard[j])
+
+    return noteBoard
+
 class Sounds:
     def __init__(self, n, dist, fret):
         self.n = n
         self.vol = 75
-
-        # Create Scale
-        mid = int(n / 2)
-        scale = [60]*n
-
-        j = mid-1
-        for i in range(mid):
-            scale[j] += dist*(i+1)
-            j -= 1
-
-        j = mid+1
-        if(n % 2 == 0):
-            mid -= 1
-        for i in range(mid):
-            scale[j] -= dist*(i+1)
-            j += 1
-
-        # Create Fretboard
-        fretboard = [0]*n
-        j = mid-1
-        for i in range(mid):
-            fretboard[j] -= fret*(i+1)
-            j -= 1
+        self.boardNotes = createNotes(n, dist, fret)
         
-        j = mid+1
-        if(n % 2 == 0):
-            mid += 1
-        for i in range(mid):
-            fretboard[j] += fret*(i+1)
-            j += 1
-        
-        
-        self.scale = scale
-        self.fretboard = fretboard
         md.init()
         self.player = md.Output(0)
         self.player.set_instrument(0)
 
     def playChords(self, chord):
         for i in chord:
-            self.player.note_on(self.scale[i[0]] + self.fretboard[i[1]], self.vol)
+            self.player.note_on(self.boardNotes[i[0]][i[1]], self.vol)
 
     def stopChords(self, chord):
         for i in chord:
-            self.player.note_off(self.scale[i[0]] + self.fretboard[i[1]], 0)
+            self.player.note_off(self.boardNotes[i[0]][i[1]], 0)
 
     def destroy(self):
         md.quit()
@@ -56,3 +63,9 @@ class Sounds:
 
     def setInstr(self, i):
         self.player.set_instrument(int(i))
+
+    def getBoardNotes(self):
+        return self.boardNotes
+    
+    def setBoardNotes(self, n, dist, fret):
+        self.boardNotes = createNotes(n, dist, fret)
