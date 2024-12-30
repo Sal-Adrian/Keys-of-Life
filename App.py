@@ -77,6 +77,7 @@ def submitSize(x):
     global boardSize
     global playing
     global p
+    global boardNotes
     try:
         val = int(sizeField.get())
     except ValueError:
@@ -90,6 +91,7 @@ def submitSize(x):
         strSize.set(boardSize)
         buildBoard()
         p = s.Sounds(boardSize, dist, fret)
+        boardNotes = p.getBoardNotes()
         setInstr(instrBox.get())
 
 def submitBPM(x):
@@ -137,7 +139,7 @@ def togglePlayer():
 def clearBoard():
     for i in range(boardSize):
         for j in range(boardSize):
-            board[i][j].config(image=sleepImg)
+            board[i][j].config(image=blackImg)
             bitBoard[i][j] = 0
 
 def randomBoard():
@@ -152,6 +154,7 @@ def setInstr(e):
 def submitDist(x):
     global dist
     global p
+    global boardNotes
     try:
         val = int(distField.get())
     except ValueError:
@@ -159,17 +162,14 @@ def submitDist(x):
     
     # Arbitrarily set max to 12
     if(val >= 0 and val <= 12):
-        if(playing):
-            togglePlayer()
-        p.destroy()
         dist = val
         strDist.set(val)
-        p = s.Sounds(boardSize, dist, fret)
-        setInstr(instrBox.get())
+        p.setBoardNotes(boardSize, dist, fret)
 
 def submitFret(x):
     global fret
     global p
+    global boardNotes
     try:
         val = int(fretField.get())
     except ValueError:
@@ -177,14 +177,9 @@ def submitFret(x):
     
     # Arbitrarily set max to 12
     if(val >= 0 and val <= 12):
-        if(playing):
-            togglePlayer()
-        p.destroy()
         fret = val
         strFret.set(val)
-        p = s.Sounds(boardSize, dist, fret)
-        setInstr(instrBox.get())
-
+        p.setBoardNotes(boardSize, dist, fret)
 
 
 if __name__ == '__main__':
@@ -199,11 +194,12 @@ if __name__ == '__main__':
     dist = 2
     fret = 2
     p = s.Sounds(boardSize, dist, fret)
+    boardNotes = p.getBoardNotes()
     
 
     root = tk.Tk()
     root.title("Keys of Life")
-    root.geometry('900x600')
+    root.geometry('500x600')
     root.config(bg=backColor)
 
     mainFrame = tk.Frame(root)
