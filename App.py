@@ -20,8 +20,7 @@ def stepLoop():
         root.after(timeStep, stepLoop)
 
 def loadBoard():
-    for i in range(boardSize):
-        chord[i] = False
+    chord.clear()
 
     for i in range(boardSize):
         for j in range(boardSize):
@@ -35,7 +34,7 @@ def loadBoard():
             else:
                 board[i][j].config(image=singImg)
                 bitBoard[i][j] = 1
-                chord[i] = True
+                chord.append([i,j])
 
 def oneStep():
     global bitBoard
@@ -47,8 +46,7 @@ def buildBoard():
     global smileImg
     global singImg
     global oldImg
-    global chord
-    chord = [False]*boardSize
+    chord.clear()
     
     # Format Images
     bW = int(400 / boardSize)
@@ -97,7 +95,7 @@ def submitSize(x):
         boardSize = val
         strSize.set(boardSize)
         buildBoard()
-        p = s.Sounds(boardSize, dist)
+        p = s.Sounds(boardSize, dist, fret)
         setInstr(instrBox.get())
 
 def submitBPM(x):
@@ -172,7 +170,25 @@ def submitDist(x):
         p.destroy()
         dist = val
         strDist.set(val)
-        p = s.Sounds(boardSize, dist)
+        p = s.Sounds(boardSize, dist, fret)
+        setInstr(instrBox.get())
+
+def submitFret(x):
+    global fret
+    global p
+    try:
+        val = int(fretField.get())
+    except ValueError:
+        return
+    
+    # Arbitrarily set max to 12
+    if(val >= 0 and val <= 12):
+        if(playing):
+            togglePlayer()
+        p.destroy()
+        fret = val
+        strFret.set(val)
+        p = s.Sounds(boardSize, dist, fret)
         setInstr(instrBox.get())
 
 
@@ -187,7 +203,8 @@ if __name__ == '__main__':
     numNotes = -1
 
     dist = 2
-    p = s.Sounds(boardSize, dist)
+    fret = 2
+    p = s.Sounds(boardSize, dist, fret)
     
 
     root = tk.Tk()
@@ -286,7 +303,6 @@ if __name__ == '__main__':
     instrBox.bind('<<ComboboxSelected>>', lambda x=instrBox.get() : setInstr(x))
     instrBox.grid(row=3, column=1, columnspan=3)
     instrBox.current(0)
-    
 
 
 
@@ -303,6 +319,7 @@ if __name__ == '__main__':
     # Build game board
     bitBoard = []
     board = []
+    chord = []
     buildBoard()
 
 
@@ -344,7 +361,7 @@ if __name__ == '__main__':
     eFrame2.pack()
 
     # GET string distance
-    strDist = tk.StringVar(eFrame2, 2)
+    strDist = tk.StringVar(eFrame2, dist)
     distHeader = tk.Label(eFrame2, text="String Dist:", 
         bg=foreColor, fg='#FFFFFF')
     distField = tk.Entry(eFrame2, width=5, 
@@ -359,6 +376,23 @@ if __name__ == '__main__':
     distBuffer.grid(row=0, column=2)
     distLabel.grid(row=0, column=3)
     distField.bind("<Return>", submitDist)
+
+    # GET fret distance
+    strFret = tk.StringVar(eFrame2, fret)
+    fretHeader = tk.Label(eFrame2, text="Fret Dist:", 
+        bg=foreColor, fg='#FFFFFF')
+    fretField = tk.Entry(eFrame2, width=5, 
+        bg=foreColor, fg='#FFFFFF')
+    fretBuffer = tk.Label(eFrame2, text=" | ", 
+        bg=foreColor, fg='#FFFFFF')
+    fretLabel = tk.Label(eFrame2, textvariable=strFret, 
+        bg=foreColor, fg='#FFFFFF')
+
+    fretHeader.grid(row=1, column=0)
+    fretField.grid(row=1, column=1)
+    fretBuffer.grid(row=1, column=2)
+    fretLabel.grid(row=1, column=3)
+    fretField.bind("<Return>", submitFret)
 
 
     
