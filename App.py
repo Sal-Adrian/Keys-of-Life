@@ -1,3 +1,4 @@
+import copy
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
@@ -127,6 +128,7 @@ def toggleFace(i, j):
 
 def togglePlayer():
     global playing
+    global prevBoard
     if(playing):
         playerBtn.config(image=playImg)
         playing = False
@@ -134,7 +136,14 @@ def togglePlayer():
     else:
         playerBtn.config(image=pauseImg)
         playing = True
+        prevBoard = bitBoard
         start()
+
+def goBack():
+    global bitBoard
+    bitBoard = prevBoard
+    if(not playing):
+        loadBoard()
 
 def clearBoard():
     for i in range(boardSize):
@@ -322,7 +331,13 @@ if __name__ == '__main__':
     clearBtn = tk.Button(btnFrame, image=clearImg, command=clearBoard)
     clearBtn.grid(row=0, column=0)
 
-    # Pause button
+    # Go Back button
+    goBackOG = Image.open('Images/goBack.jpg').resize((50,50))
+    goBackImg = ImageTk.PhotoImage(goBackOG)
+    goBackBtn = tk.Button(btnFrame, image=goBackImg, command=goBack)
+    goBackBtn.grid(row=0, column=1)
+
+    # Pause/Play button
     pauseOG = Image.open('Images/pause.jpg').resize((50,50))
     pauseImg = ImageTk.PhotoImage(pauseOG)
     playOG = Image.open('Images/play.jpg').resize((50,50))
@@ -330,19 +345,19 @@ if __name__ == '__main__':
 
     playing = False
     playerBtn = tk.Button(btnFrame, image=playImg, command=togglePlayer)
-    playerBtn.grid(row=0, column=1)
+    playerBtn.grid(row=0, column=2)
 
     # Next step button
     oneStepOG = Image.open('Images/oneStep.jpg').resize((50,50))
     oneStepImg = ImageTk.PhotoImage(oneStepOG)
     oneStepBtn = tk.Button(btnFrame, image=oneStepImg, command=oneStep)
-    oneStepBtn.grid(row=0, column=2)
+    oneStepBtn.grid(row=0, column=3)
     
     # Randomizer button
     randomOG = Image.open('Images/random.jpg').resize((50,50))
     randomImg = ImageTk.PhotoImage(randomOG)
     randomBtn = tk.Button(btnFrame, image=randomImg, command=randomBoard)
-    randomBtn.grid(row=0, column=3)
+    randomBtn.grid(row=0, column=4)
 
 
     # More Entries
