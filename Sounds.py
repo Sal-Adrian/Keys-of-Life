@@ -1,48 +1,85 @@
 import pygame.midi as md
 
+# dec:  False = Fret
+#       True = String
+def createScale(n, scale, dec):
+    match scale:
+        case "Pentatonic":
+            arr = []
+            curr = int(n / 2)
+            note = curr % 5
+            octave = 12*int(curr/5)
+            curr = octave if dec else -octave
+
+            if(note == 1):
+                curr += 2 if dec else -3
+            elif(note == 2):
+                curr += 4 if dec else -5
+            elif(note == 3):
+                curr += 7 if dec else -8
+            elif(note == 4):
+                curr += 9 if dec else -10
+
+            for i in range(n):
+                if(dec):
+                    if(note < 0):
+                        note = 4
+                    if(note == 0 or note == 3):
+                        curr -= 3
+                    else:
+                        curr -= 2
+                    note -= 1
+                else:
+                    if(note > 4):
+                        note = 0
+                    if(note == 2 or note == 4):
+                        curr += 3
+                    else:
+                        curr += 2
+                    note += 1
+                arr.append(curr)   
+
+            return arr
+
 def createNotes(n, dist, fret):
     # Create strings
-    mid = int(n / 2)
-    strings = [60]*n
-
-    j = mid-1
-    for i in range(mid):
-        strings[j] += dist*(i+1)
-        j -= 1
-
-    j = mid+1
-    if(n % 2 == 0):
-        mid -= 1
-    for i in range(mid):
-        strings[j] -= dist*(i+1)
-        j += 1
-
-    # Create Fretboard
-    fretboard = [0]*n
-    j = mid-1
-    for i in range(mid):
-        fretboard[j] -= fret*(i+1)
-        j -= 1
+    strings = []
+    if(isinstance(dist, str)):
+        strings = createScale(n, dist, True)
+    else:
+        curr = int(n / 2) 
+        curr *= dist
+        for i in range(n):
+            strings.append(curr)
+            curr -= dist
     
-    j = mid+1
-    if(n % 2 == 0):
-        mid += 1
-    for i in range(mid):
-        fretboard[j] += fret*(i+1)
-        j += 1
+    # Create Fretboard
+    fretboard = []
+    if(isinstance(fret, str)):
+        fretboard = createScale(n, fret, False)
+    else:
+        curr = int(n / 2) 
+        curr *= -fret
+        for i in range(n):
+            fretboard.append(curr)
+            curr += fret
     
     noteBoard = []
     for i in range(n):
         noteBoard.append([])
         for j in range(n):
-            note = strings[i] + fretboard[j]
+            note = 60 + strings[i] + fretboard[j]
             if(note < 0):
+                print("Warning: Some notes were less than 0")
                 noteBoard[i].append(0)
             elif(note > 127):
+                print("Warning: Some notes were greater than 127")
                 noteBoard[i].append(127)
             else:
-                noteBoard[i].append(strings[i] + fretboard[j])
+                noteBoard[i].append(note)
 
+    for i in noteBoard:
+        print(i)
     return noteBoard
 
 class Sounds:

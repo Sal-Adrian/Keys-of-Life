@@ -43,6 +43,7 @@ def buildBoard():
     global blackImg
     global whiteImg
     global blueImg
+    global prevBoard
     chord.clear()
     
     # Format Images
@@ -62,6 +63,7 @@ def buildBoard():
             board[i].append( tk.Button(gFrame, image=blackImg,
                 command=lambda a=i, b=j : toggleFace(a,b)) )
             board[i][j].grid(row=i, column=j)
+    prevBoard = bitBoard
 
 def destroyBoard():
     p.destroy()
@@ -160,6 +162,39 @@ def randomBoard():
 def setInstr(e):
     p.setInstr(instrBox.get())
 
+def chngDistSel():
+    val = int(distSelect.get())
+    if(val):
+        distField.config(state='normal')
+        dScaleBox.config(state='disabled')
+        submitDist(0)
+    else:
+        distField.config(state='disabled')
+        dScaleBox.config(state='normal')
+        setDistScale(0)
+
+def setDistScale(x):
+    global dist
+    dist = dScaleBox.get()
+    p.setBoardNotes(boardSize, dist, fret)
+
+def chngFretSel():
+    val = int(fretSelect.get())
+    if(val):
+        fretField.config(state='normal')
+        fScaleBox.config(state='disabled')
+        submitFret(0)
+    else:
+        fretField.config(state='disabled')
+        fScaleBox.config(state='normal')
+        setFretScale(0)
+
+
+def setFretScale(x):
+    global fret
+    fret = fScaleBox.get()
+    p.setBoardNotes(boardSize, dist, fret)
+
 def submitDist(x):
     global dist
     global p
@@ -168,7 +203,7 @@ def submitDist(x):
         val = int(distField.get())
     except ValueError:
         return
-    
+
     # Arbitrarily set max to 12
     if(val >= 0 and val <= 12):
         dist = val
@@ -200,8 +235,8 @@ if __name__ == '__main__':
     timeStep = 500  # 120 bpm
     numNotes = -1
 
-    dist = 2
-    fret = 2
+    dist = "Pentatonic"
+    fret = 0
     p = s.Sounds(boardSize, dist, fret)
     boardNotes = p.getBoardNotes()
     
@@ -297,9 +332,9 @@ if __name__ == '__main__':
     for i in range(128):
         instrList.append(i)
     instr = tk.StringVar() 
-    instrBox = ttk.Combobox(eFrame, width=15, textvariable=instr) 
+    instrBox = ttk.Combobox(eFrame, width=10, textvariable=instr) 
     instrBox.config(values=instrList)
-    instrBox.bind('<<ComboboxSelected>>', lambda x=instrBox.get() : setInstr(x))
+    instrBox.bind('<<ComboboxSelected>>', setInstr)
     instrBox.grid(row=3, column=1, columnspan=3)
     instrBox.current(0)
 
@@ -364,38 +399,78 @@ if __name__ == '__main__':
     eFrame2 = tk.Frame(innerFrame, bg='#505050')
     eFrame2.pack()
 
+    scaleList = ["Pentatonic"]
     # GET string distance
-    strDist = tk.StringVar(eFrame2, dist)
-    distHeader = tk.Label(eFrame2, text="String Dist:", 
+    distSelect = tk.StringVar(eFrame2, 0)
+    distHeader = tk.Label(eFrame2, text="String:", 
         bg=foreColor, fg='#FFFFFF')
-    distField = tk.Entry(eFrame2, width=5, 
+    distRad1 = tk.Radiobutton(eFrame2, text="Scale:",
+        bg=foreColor, fg='#FFFFFF', selectcolor=backColor, command=chngDistSel,
+        variable=distSelect, value=0)
+
+    dScale = tk.StringVar() 
+    dScaleBox = ttk.Combobox(eFrame2, width=10, textvariable=dScale,
+        values=scaleList)
+    dScaleBox.bind('<<ComboboxSelected>>', setDistScale)
+    dScaleBox.current(0)
+
+    strDist = tk.StringVar(eFrame2, 2)
+    distRad2 = tk.Radiobutton(eFrame2, text="Interval:",
+        bg=foreColor, fg='#FFFFFF', selectcolor=backColor, command=chngDistSel,
+        variable=distSelect, value=1)
+    distField = tk.Entry(eFrame2, width=5,
         bg=foreColor, fg='#FFFFFF')
+    distField.insert(0, "2")
+    distField.config(state='disabled')
     distBuffer = tk.Label(eFrame2, text=" | ", 
         bg=foreColor, fg='#FFFFFF')
     distLabel = tk.Label(eFrame2, textvariable=strDist, 
         bg=foreColor, fg='#FFFFFF')
 
-    distHeader.grid(row=0, column=0)
-    distField.grid(row=0, column=1)
-    distBuffer.grid(row=0, column=2)
-    distLabel.grid(row=0, column=3)
+    distHeader.grid(row=0, column=1)
+    distRad1.grid(row=1, column=0, sticky='w')
+    dScaleBox.grid(row=1, column=1, columnspan=3)
+    distRad2.grid(row=2, column=0, sticky='w')
+    distField.grid(row=2, column=1)
+    distBuffer.grid(row=2, column=2)
+    distLabel.grid(row=2, column=3)
     distField.bind("<Return>", submitDist)
 
     # GET fret distance
-    strFret = tk.StringVar(eFrame2, fret)
-    fretHeader = tk.Label(eFrame2, text="Fret Dist:", 
+    fretSelect = tk.StringVar(eFrame2, 1)
+    fretHeader = tk.Label(eFrame2, text="Fret:", 
         bg=foreColor, fg='#FFFFFF')
-    fretField = tk.Entry(eFrame2, width=5, 
+    fretRad1 = tk.Radiobutton(eFrame2, text="Scale:",
+        bg=foreColor, fg='#FFFFFF', selectcolor=backColor, command=chngFretSel,
+        variable=fretSelect, value=0)
+
+    fScale = tk.StringVar() 
+    fScaleBox = ttk.Combobox(eFrame2, width=10, textvariable=fScale,
+        values=scaleList)
+    fScaleBox.config(state='disabled')
+    fScaleBox.bind('<<ComboboxSelected>>', setFretScale)
+    fScaleBox.current(0)
+
+    strFret = tk.StringVar(eFrame2, 0)
+    fretRad2 = tk.Radiobutton(eFrame2, text="Interval:",
+        bg=foreColor, fg='#FFFFFF', selectcolor=backColor, command=chngFretSel,
+        variable=fretSelect, value=1)
+    fretField = tk.Entry(eFrame2, width=5,
         bg=foreColor, fg='#FFFFFF')
+    fretField.insert(0, "0")
     fretBuffer = tk.Label(eFrame2, text=" | ", 
         bg=foreColor, fg='#FFFFFF')
     fretLabel = tk.Label(eFrame2, textvariable=strFret, 
         bg=foreColor, fg='#FFFFFF')
 
-    fretHeader.grid(row=1, column=0)
-    fretField.grid(row=1, column=1)
-    fretBuffer.grid(row=1, column=2)
-    fretLabel.grid(row=1, column=3)
+    tk.Label(eFrame2, text="Buffer", bg=foreColor, fg=foreColor).grid(row=0, column=6)
+    fretHeader.grid(row=0, column=8)
+    fretRad1.grid(row=1, column=7, sticky='w')
+    fScaleBox.grid(row=1, column=8, columnspan=3)
+    fretRad2.grid(row=2, column=7, sticky='w')
+    fretField.grid(row=2, column=8)
+    fretBuffer.grid(row=2, column=9)
+    fretLabel.grid(row=2, column=10)
     fretField.bind("<Return>", submitFret)
 
 
