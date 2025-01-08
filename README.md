@@ -3,6 +3,7 @@ Through terminal or just double click application.
 
 # Requires:
 - tkinter
+- ttkbootstrap
 - PIL
 - pygame
 

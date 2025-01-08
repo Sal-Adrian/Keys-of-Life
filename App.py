@@ -1,6 +1,6 @@
 import copy
 import tkinter as tk
-from tkinter import ttk
+import ttkbootstrap as ttk
 from PIL import Image, ImageTk
 from random import randrange
 from GoL import nextStep
@@ -233,7 +233,7 @@ if __name__ == '__main__':
     if(boardSize < 3 or boardSize > 25): 
         exit()
     timeStep = 500  # 120 bpm
-    numNotes = -1
+    numNotes = 3
 
     dist = "Pentatonic"
     fret = 0
@@ -241,42 +241,36 @@ if __name__ == '__main__':
     boardNotes = p.getBoardNotes()
     
 
-    root = tk.Tk()
+    root = ttk.Window(themename='darkly')
     root.title("Keys of Life")
-    root.geometry('500x600')
-    root.config(bg=backColor)
+    root.geometry('600x700')
 
-    mainFrame = tk.Frame(root)
+    mainFrame = ttk.Frame(root)
     mainFrame.pack(fill="both", expand=1)
-    canvas = tk.Canvas(mainFrame)
+    canvas = ttk.Canvas(mainFrame)
     canvas.pack(side="left", fill="both", expand=1)
-    canvas.config(bg=backColor)
 
     # Create Scrollbar
-    scrollbar = ttk.Scrollbar(mainFrame, orient="vertical", command=canvas.yview)
+    scrollbar = ttk.Scrollbar(mainFrame, orient="vertical", command=canvas.yview, 
+        bootstyle="round")
     scrollbar.pack(side="right", fill="y")
     canvas.config(yscrollcommand=scrollbar.set)
     canvas.bind('<Configure>', lambda e: canvas.config(scrollregion = canvas.bbox("all")))
     
-    innerFrame = tk.Frame(canvas)
+    innerFrame = ttk.Frame(canvas)
     canvas.create_window((0,0), window=innerFrame, anchor="nw")
-    innerFrame.config(bg=backColor)
 
 
     # Entries
-    eFrame = tk.Frame(innerFrame, bg='#505050')
+    eFrame = ttk.Frame(innerFrame)
     eFrame.pack()
 
     # GET board size
-    strSize = tk.StringVar(eFrame, boardSize)
-    sizeHeader = tk.Label(eFrame, text="Board Length:", 
-        bg=foreColor, fg='#FFFFFF')
-    sizeField = tk.Entry(eFrame, width=5, 
-        bg=foreColor, fg='#FFFFFF')
-    sizeBuffer = tk.Label(eFrame, text=" | ", 
-        bg=foreColor, fg='#FFFFFF')
-    sizeLabel = tk.Label(eFrame, textvariable=strSize, 
-        bg=foreColor, fg='#FFFFFF')
+    strSize = ttk.StringVar(eFrame, boardSize)
+    sizeHeader = ttk.Label(eFrame, text="Board Length:")
+    sizeField = ttk.Entry(eFrame, width=5)
+    sizeBuffer = ttk.Label(eFrame, text=" | ")
+    sizeLabel = ttk.Label(eFrame, textvariable=strSize)
 
     sizeHeader.grid(row=0, column=0)
     sizeField.grid(row=0, column=1)
@@ -285,15 +279,11 @@ if __name__ == '__main__':
     sizeField.bind("<Return>", submitSize)
 
     # GET bpm
-    strBPM = tk.StringVar(eFrame, int(60000 / timeStep))
-    bpmHeader = tk.Label(eFrame, text="BPM:", 
-        bg=foreColor, fg='#FFFFFF')
-    bpmField = tk.Entry(eFrame, width=5, 
-        bg=foreColor, fg='#FFFFFF')
-    bpmBuffer = tk.Label(eFrame, text=" | ", 
-        bg=foreColor, fg='#FFFFFF')
-    bpmLabel = tk.Label(eFrame, textvariable=strBPM, 
-        bg=foreColor, fg='#FFFFFF')
+    strBPM = ttk.StringVar(eFrame, int(60000 / timeStep))
+    bpmHeader = ttk.Label(eFrame, text="BPM:")
+    bpmField = ttk.Entry(eFrame, width=5)
+    bpmBuffer = ttk.Label(eFrame, text=" | ")
+    bpmLabel = ttk.Label(eFrame, textvariable=strBPM)
 
     bpmHeader.grid(row=1, column=0)
     bpmField.grid(row=1, column=1)
@@ -302,15 +292,11 @@ if __name__ == '__main__':
     bpmField.bind("<Return>", submitBPM)
 
     # GET amount of notes
-    strNum = tk.StringVar(eFrame, numNotes)
-    numHeader = tk.Label(eFrame, text="Num. Notes:", 
-        bg=foreColor, fg='#FFFFFF')
-    numField = tk.Entry(eFrame, width=5, 
-        bg=foreColor, fg='#FFFFFF')
-    numBuffer = tk.Label(eFrame, text=" | ", 
-        bg=foreColor, fg='#FFFFFF')
-    numLabel = tk.Label(eFrame, textvariable=strNum, 
-        bg=foreColor, fg='#FFFFFF')
+    strNum = ttk.StringVar(eFrame, numNotes)
+    numHeader = ttk.Label(eFrame, text="Num. Notes:")
+    numField = ttk.Entry(eFrame, width=5)
+    numBuffer = ttk.Label(eFrame, text=" | ")
+    numLabel = ttk.Label(eFrame, textvariable=strNum)
 
     numHeader.grid(row=2, column=0)
     numField.grid(row=2, column=1)
@@ -318,20 +304,18 @@ if __name__ == '__main__':
     numLabel.grid(row=2, column=3)
     numField.bind("<Return>", submitNum)
 
-    randMel = tk.IntVar()
-    cRandMel = tk.Checkbutton(eFrame, text="Random", variable=randMel, onvalue=1, offvalue=0, 
-    bg=foreColor, fg='#FFFFFF', selectcolor=backColor)
+    randMel = ttk.IntVar()
+    cRandMel = ttk.Checkbutton(eFrame, text="Random", variable=randMel, onvalue=1, offvalue=0)
     cRandMel.grid(row=2, column=4)
 
     # GET instrument
-    instrHeader = tk.Label(eFrame, text="Instrument:", 
-        bg=foreColor, fg='#FFFFFF')
+    instrHeader = ttk.Label(eFrame, text="Instrument:")
     instrHeader.grid(row=3, column=0)
     
     instrList = []
     for i in range(128):
         instrList.append(i)
-    instr = tk.StringVar() 
+    instr = ttk.StringVar() 
     instrBox = ttk.Combobox(eFrame, width=10, textvariable=instr) 
     instrBox.config(values=instrList)
     instrBox.bind('<<ComboboxSelected>>', setInstr)
@@ -341,7 +325,7 @@ if __name__ == '__main__':
 
 
     # Game Frame
-    gFrame = tk.Frame(innerFrame)
+    gFrame = ttk.Frame(innerFrame)
     gFrame.pack()
 
     # Open images for tiles
@@ -357,7 +341,7 @@ if __name__ == '__main__':
 
 
     # Buttons
-    btnFrame = tk.Frame(innerFrame)
+    btnFrame = ttk.Frame(innerFrame)
     btnFrame.pack()
 
     # Clear button
@@ -396,36 +380,30 @@ if __name__ == '__main__':
 
 
     # More Entries
-    eFrame2 = tk.Frame(innerFrame, bg='#505050')
+    eFrame2 = ttk.Frame(innerFrame)
     eFrame2.pack()
 
     scaleList = ["Pentatonic"]
     # GET string distance
-    distSelect = tk.StringVar(eFrame2, 0)
-    distHeader = tk.Label(eFrame2, text="String:", 
-        bg=foreColor, fg='#FFFFFF')
-    distRad1 = tk.Radiobutton(eFrame2, text="Scale:",
-        bg=foreColor, fg='#FFFFFF', selectcolor=backColor, command=chngDistSel,
-        variable=distSelect, value=0)
+    distSelect = ttk.StringVar(eFrame2, 0)
+    distHeader = ttk.Label(eFrame2, text="String:")
+    distRad1 = ttk.Radiobutton(eFrame2, text="Scale:", 
+        command=chngDistSel, variable=distSelect, value=0)        
 
-    dScale = tk.StringVar() 
+    dScale = ttk.StringVar() 
     dScaleBox = ttk.Combobox(eFrame2, width=10, textvariable=dScale,
         values=scaleList)
     dScaleBox.bind('<<ComboboxSelected>>', setDistScale)
     dScaleBox.current(0)
 
-    strDist = tk.StringVar(eFrame2, 2)
-    distRad2 = tk.Radiobutton(eFrame2, text="Interval:",
-        bg=foreColor, fg='#FFFFFF', selectcolor=backColor, command=chngDistSel,
-        variable=distSelect, value=1)
-    distField = tk.Entry(eFrame2, width=5,
-        bg=foreColor, fg='#FFFFFF')
+    strDist = ttk.StringVar(eFrame2, 2)
+    distRad2 = ttk.Radiobutton(eFrame2, text="Interval:",
+        command=chngDistSel, variable=distSelect, value=1)
+    distField = ttk.Entry(eFrame2, width=5)
     distField.insert(0, "2")
     distField.config(state='disabled')
-    distBuffer = tk.Label(eFrame2, text=" | ", 
-        bg=foreColor, fg='#FFFFFF')
-    distLabel = tk.Label(eFrame2, textvariable=strDist, 
-        bg=foreColor, fg='#FFFFFF')
+    distBuffer = ttk.Label(eFrame2, text=" | ")
+    distLabel = ttk.Label(eFrame2, textvariable=strDist)
 
     distHeader.grid(row=0, column=1)
     distRad1.grid(row=1, column=0, sticky='w')
@@ -437,37 +415,30 @@ if __name__ == '__main__':
     distField.bind("<Return>", submitDist)
 
     # GET fret distance
-    fretSelect = tk.StringVar(eFrame2, 1)
-    fretHeader = tk.Label(eFrame2, text="Fret:", 
-        bg=foreColor, fg='#FFFFFF')
-    fretRad1 = tk.Radiobutton(eFrame2, text="Scale:",
-        bg=foreColor, fg='#FFFFFF', selectcolor=backColor, command=chngFretSel,
-        variable=fretSelect, value=0)
+    fretSelect = ttk.StringVar(eFrame2, 1)
+    fretHeader = ttk.Label(eFrame2, text="Fret:")
+    fretRad1 = ttk.Radiobutton(eFrame2, text="Scale:",
+        command=chngFretSel, variable=fretSelect, value=0)
 
-    fScale = tk.StringVar() 
+    fScale = ttk.StringVar() 
     fScaleBox = ttk.Combobox(eFrame2, width=10, textvariable=fScale,
         values=scaleList)
     fScaleBox.config(state='disabled')
     fScaleBox.bind('<<ComboboxSelected>>', setFretScale)
     fScaleBox.current(0)
 
-    strFret = tk.StringVar(eFrame2, 0)
-    fretRad2 = tk.Radiobutton(eFrame2, text="Interval:",
-        bg=foreColor, fg='#FFFFFF', selectcolor=backColor, command=chngFretSel,
-        variable=fretSelect, value=1)
-    fretField = tk.Entry(eFrame2, width=5,
-        bg=foreColor, fg='#FFFFFF')
+    strFret = ttk.StringVar(eFrame2, 0)
+    fretRad2 = ttk.Radiobutton(eFrame2, text="Interval:",
+        command=chngFretSel, variable=fretSelect, value=1)
+    fretField = ttk.Entry(eFrame2, width=5)
     fretField.insert(0, "0")
-    fretBuffer = tk.Label(eFrame2, text=" | ", 
-        bg=foreColor, fg='#FFFFFF')
-    fretLabel = tk.Label(eFrame2, textvariable=strFret, 
-        bg=foreColor, fg='#FFFFFF')
+    fretBuffer = ttk.Label(eFrame2, text=" | ")
+    fretLabel = ttk.Label(eFrame2, textvariable=strFret)
 
-    tk.Label(eFrame2, text="Buffer", bg=foreColor, fg=foreColor).grid(row=0, column=6)
-    fretHeader.grid(row=0, column=8)
-    fretRad1.grid(row=1, column=7, sticky='w')
+    fretHeader.grid(row=0, column=8, padx=(50,0))
+    fretRad1.grid(row=1, column=7, sticky='w', padx=(50,0))
     fScaleBox.grid(row=1, column=8, columnspan=3)
-    fretRad2.grid(row=2, column=7, sticky='w')
+    fretRad2.grid(row=2, column=7, sticky='w', padx=(50,0))
     fretField.grid(row=2, column=8)
     fretBuffer.grid(row=2, column=9)
     fretLabel.grid(row=2, column=10)
