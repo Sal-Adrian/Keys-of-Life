@@ -47,7 +47,7 @@ def buildBoard():
     chord.clear()
     
     # Format Images
-    bW = int(400 / boardSize)
+    bW = int(500 / boardSize)
     resizeBlack = blackOG.resize((bW,bW))
     blackImg = ImageTk.PhotoImage(resizeBlack)
     resizeWhite = whiteOG.resize((bW,bW))
@@ -227,8 +227,6 @@ def submitFret(x):
 
 
 if __name__ == '__main__':
-    backColor = '#303030'
-    foreColor = '#505050'
     boardSize = 10  # App gets weird/breaks when size is too big
     if(boardSize < 3 or boardSize > 25): 
         exit()
@@ -243,12 +241,12 @@ if __name__ == '__main__':
 
     root = ttk.Window(themename='darkly')
     root.title("Keys of Life")
-    root.geometry('600x700')
+    root.geometry('600x850')
 
     mainFrame = ttk.Frame(root)
     mainFrame.pack(fill="both", expand=1)
     canvas = ttk.Canvas(mainFrame)
-    canvas.pack(side="left", fill="both", expand=1)
+    canvas.pack(side="left", fill="y", expand=1)
 
     # Create Scrollbar
     scrollbar = ttk.Scrollbar(mainFrame, orient="vertical", command=canvas.yview, 
@@ -258,7 +256,7 @@ if __name__ == '__main__':
     canvas.bind('<Configure>', lambda e: canvas.config(scrollregion = canvas.bbox("all")))
     
     innerFrame = ttk.Frame(canvas)
-    canvas.create_window((0,0), window=innerFrame, anchor="nw")
+    canvas.create_window((25,0), window=innerFrame, anchor="nw")
 
 
     # Entries
@@ -272,10 +270,10 @@ if __name__ == '__main__':
     sizeBuffer = ttk.Label(eFrame, text=" | ")
     sizeLabel = ttk.Label(eFrame, textvariable=strSize)
 
-    sizeHeader.grid(row=0, column=0)
-    sizeField.grid(row=0, column=1)
-    sizeBuffer.grid(row=0, column=2)
-    sizeLabel.grid(row=0, column=3)
+    sizeHeader.grid(row=0, column=0, pady=(20, 0))
+    sizeField.grid(row=0, column=1, pady=(20, 0))
+    sizeBuffer.grid(row=0, column=2, pady=(20, 0))
+    sizeLabel.grid(row=0, column=3, pady=(20, 0))
     sizeField.bind("<Return>", submitSize)
 
     # GET bpm
@@ -293,7 +291,7 @@ if __name__ == '__main__':
 
     # GET amount of notes
     strNum = ttk.StringVar(eFrame, numNotes)
-    numHeader = ttk.Label(eFrame, text="Num. Notes:")
+    numHeader = ttk.Label(eFrame, text="Max Notes:")
     numField = ttk.Entry(eFrame, width=5)
     numBuffer = ttk.Label(eFrame, text=" | ")
     numLabel = ttk.Label(eFrame, textvariable=strNum)
@@ -310,7 +308,7 @@ if __name__ == '__main__':
 
     # GET instrument
     instrHeader = ttk.Label(eFrame, text="Instrument:")
-    instrHeader.grid(row=3, column=0)
+    instrHeader.grid(row=3, column=0, pady=(0, 30))
     
     instrList = []
     for i in range(128):
@@ -319,7 +317,7 @@ if __name__ == '__main__':
     instrBox = ttk.Combobox(eFrame, width=10, textvariable=instr) 
     instrBox.config(values=instrList)
     instrBox.bind('<<ComboboxSelected>>', setInstr)
-    instrBox.grid(row=3, column=1, columnspan=3)
+    instrBox.grid(row=3, column=1, columnspan=3, pady=(0, 30))
     instrBox.current(0)
 
 
@@ -343,40 +341,41 @@ if __name__ == '__main__':
     # Buttons
     btnFrame = ttk.Frame(innerFrame)
     btnFrame.pack()
+    btnSz = 75
 
     # Clear button
-    clearOG = Image.open('Images/clear.jpg').resize((50,50))
+    clearOG = Image.open('Images/clear.jpg').resize((btnSz,btnSz))
     clearImg = ImageTk.PhotoImage(clearOG)
     clearBtn = tk.Button(btnFrame, image=clearImg, command=clearBoard)
-    clearBtn.grid(row=0, column=0)
+    clearBtn.grid(row=0, column=0, pady=(15, 30))
 
     # Go Back button
-    goBackOG = Image.open('Images/goBack.jpg').resize((50,50))
+    goBackOG = Image.open('Images/goBack.jpg').resize((btnSz,btnSz))
     goBackImg = ImageTk.PhotoImage(goBackOG)
     goBackBtn = tk.Button(btnFrame, image=goBackImg, command=goBack)
-    goBackBtn.grid(row=0, column=1)
+    goBackBtn.grid(row=0, column=1, pady=(15, 30))
 
     # Pause/Play button
-    pauseOG = Image.open('Images/pause.jpg').resize((50,50))
+    pauseOG = Image.open('Images/pause.jpg').resize((btnSz,btnSz))
     pauseImg = ImageTk.PhotoImage(pauseOG)
-    playOG = Image.open('Images/play.jpg').resize((50,50))
+    playOG = Image.open('Images/play.jpg').resize((btnSz,btnSz))
     playImg = ImageTk.PhotoImage(playOG)
 
     playing = False
     playerBtn = tk.Button(btnFrame, image=playImg, command=togglePlayer)
-    playerBtn.grid(row=0, column=2)
+    playerBtn.grid(row=0, column=2, pady=(15, 30))
 
     # Next step button
-    oneStepOG = Image.open('Images/oneStep.jpg').resize((50,50))
+    oneStepOG = Image.open('Images/oneStep.jpg').resize((btnSz,btnSz))
     oneStepImg = ImageTk.PhotoImage(oneStepOG)
     oneStepBtn = tk.Button(btnFrame, image=oneStepImg, command=oneStep)
-    oneStepBtn.grid(row=0, column=3)
+    oneStepBtn.grid(row=0, column=3, pady=(15, 30))
     
     # Randomizer button
-    randomOG = Image.open('Images/random.jpg').resize((50,50))
+    randomOG = Image.open('Images/random.jpg').resize((btnSz,btnSz))
     randomImg = ImageTk.PhotoImage(randomOG)
     randomBtn = tk.Button(btnFrame, image=randomImg, command=randomBoard)
-    randomBtn.grid(row=0, column=4)
+    randomBtn.grid(row=0, column=4, pady=(15, 30))
 
 
     # More Entries
@@ -408,10 +407,10 @@ if __name__ == '__main__':
     distHeader.grid(row=0, column=1)
     distRad1.grid(row=1, column=0, sticky='w')
     dScaleBox.grid(row=1, column=1, columnspan=3)
-    distRad2.grid(row=2, column=0, sticky='w')
-    distField.grid(row=2, column=1)
-    distBuffer.grid(row=2, column=2)
-    distLabel.grid(row=2, column=3)
+    distRad2.grid(row=2, column=0, sticky='w', pady=(0, 30))
+    distField.grid(row=2, column=1, pady=(0, 30))
+    distBuffer.grid(row=2, column=2, pady=(0, 30))
+    distLabel.grid(row=2, column=3, pady=(0, 30))
     distField.bind("<Return>", submitDist)
 
     # GET fret distance
@@ -438,10 +437,10 @@ if __name__ == '__main__':
     fretHeader.grid(row=0, column=8, padx=(50,0))
     fretRad1.grid(row=1, column=7, sticky='w', padx=(50,0))
     fScaleBox.grid(row=1, column=8, columnspan=3)
-    fretRad2.grid(row=2, column=7, sticky='w', padx=(50,0))
-    fretField.grid(row=2, column=8)
-    fretBuffer.grid(row=2, column=9)
-    fretLabel.grid(row=2, column=10)
+    fretRad2.grid(row=2, column=7, sticky='w', padx=(50,0), pady=(0, 30))
+    fretField.grid(row=2, column=8, pady=(0, 30))
+    fretBuffer.grid(row=2, column=9, pady=(0, 30))
+    fretLabel.grid(row=2, column=10, pady=(0, 30))
     fretField.bind("<Return>", submitFret)
 
 

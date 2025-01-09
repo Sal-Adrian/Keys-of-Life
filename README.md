@@ -12,8 +12,11 @@ Board Length: 	1-25
 
 BPM:		1-300
 
-Num. Notes:	>= -1
+Max. Notes:	>= -1
 
-When Num. Notes = -1, all possible notes will play.
+When Max Notes = -1, all possible notes will play.
+
+By default, the row with the most live tiles will play thier note. 
+The "Random" checkbox negates this priority.
 
 "Go Back" button loads board configuration since the last time "Play" button was pressed.
