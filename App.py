@@ -8,7 +8,6 @@ import Sounds as s
 
 
 def start():
-    p.playChords(chord)
     root.after(timeStep, stepLoop)
 
 def stepLoop():
@@ -17,6 +16,7 @@ def stepLoop():
         p.stopChords(chord)
         bitBoard = nextStep(bitBoard, boardSize, numNotes, randMel.get())
         loadBoard()
+        p.setVol(vol.get())
         p.playChords(chord)
         root.after(timeStep, stepLoop)
 
@@ -320,7 +320,13 @@ if __name__ == '__main__':
     instrBox.grid(row=3, column=1, columnspan=3, pady=(0, 30))
     instrBox.current(0)
 
-
+    vol = ttk.IntVar()
+    vol.set(75)
+    volLabel = ttk.Label(eFrame, text="Volume:")
+    volLabel.grid(row=0, rowspan=2, column=5, padx=(55,0))
+    volScale = ttk.Scale(eFrame, variable=vol, orient='vertical',
+        from_=127, to=0)
+    volScale.grid(row=1, rowspan=3, column=5, padx=(55,0))
 
     # Game Frame
     gFrame = ttk.Frame(innerFrame)

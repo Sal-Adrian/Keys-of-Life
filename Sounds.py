@@ -112,3 +112,6 @@ class Sounds:
     
     def setBoardNotes(self, n, dist, fret):
         self.boardNotes = createNotes(n, dist, fret)
+
+    def setVol(self, v):
+        self.vol = v
