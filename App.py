@@ -25,7 +25,9 @@ def loadBoard():
 
     for i in range(boardSize):
         for j in range(boardSize):
-            if(not changed[i][j]):
+            if(changed[i][j] != 1):
+                if(changed[i][j] == 2):
+                    board[i][j].config(image=whiteImg)
                 continue
 
             if(bitBoard[i][j] == 0):
@@ -34,7 +36,7 @@ def loadBoard():
                 board[i][j].config(image=whiteImg)
             else:
                 board[i][j].config(image=blueImg)
-                bitBoard[i][j] = 1
+                # bitBoard[i][j] = 1
                 chord.append([i,j])
 
 def oneStep():
@@ -67,31 +69,21 @@ def buildBoard():
             board[i].append( tk.Button(gFrame, image=blackImg,
                 command=lambda a=i, b=j : toggleFace(a,b)) )
             board[i][j].grid(row=i, column=j)
-            changed[i].append(False)
+            changed[i].append(0)
     prevBoard = bitBoard
 
 def destroyBoard():
-    # global board
-    # global bitBoard
-    # global changed
     p.destroy()
 
-    # board = []
-    # bitBoard = []
-    # changed = []
     for i in range(boardSize):
         for j in range(boardSize):
             board[0][0].destroy()
             del board[0][0]
             del bitBoard[0][0]
             del changed[0][0]
-            # board[0].pop(0)
-            # bitBoard[0].pop(0)
         del board[0]
         del bitBoard[0]
         del changed[0]
-        # board.pop(0)
-        # bitBoard.pop(0)
             
 def submitSize(x):
     global boardSize

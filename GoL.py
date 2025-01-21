@@ -48,11 +48,11 @@ def nextStep(board, changed, n, numNotes, randMel):
                         y = n-1
                     elif(y >= n):
                         y = 0
-                    if(board[y][x] == 1):
+                    if(board[y][x] != 0):
                         neighbors += 1
                     
             # Build newBoard
-            if(board[i][j] == 1):
+            if(board[i][j] != 0):
                 if(neighbors == 2 or neighbors == 3):
                     newBoard[i].append(1)
                     # playNotes[i] = j
@@ -68,7 +68,10 @@ def nextStep(board, changed, n, numNotes, randMel):
                     rowCount[-1] += 1
                 else:
                     newBoard[i].append(0)
-            changed[i][j] = False if (board[i][j] == newBoard[i][j]) else True
+            if(board[i][j] == newBoard[i][j]):
+                changed[i][j] = 2 if (board[i][j] == 2) else 0
+            else:
+                changed[i][j] = 1
         
         if(playCurr > -1):
             playNotes.append([i,playCurr])
