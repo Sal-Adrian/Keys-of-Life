@@ -14,7 +14,7 @@ def stepLoop():
     global bitBoard
     if(playing):
         p.stopChords(chord)
-        bitBoard = nextStep(bitBoard, boardSize, numNotes, randMel.get())
+        bitBoard = nextStep(bitBoard, changed, boardSize, numNotes, randMel.get())
         loadBoard()
         p.setVol(vol.get())
         p.playChords(chord)
@@ -25,6 +25,9 @@ def loadBoard():
 
     for i in range(boardSize):
         for j in range(boardSize):
+            if(not changed[i][j]):
+                continue
+
             if(bitBoard[i][j] == 0):
                 board[i][j].config(image=blackImg)
             elif(bitBoard[i][j] == 1):
@@ -36,7 +39,7 @@ def loadBoard():
 
 def oneStep():
     global bitBoard
-    bitBoard = nextStep(bitBoard, boardSize, numNotes, randMel)
+    bitBoard = nextStep(bitBoard, changed, boardSize, numNotes, randMel.get())
     loadBoard()
 
 def buildBoard():
@@ -58,23 +61,37 @@ def buildBoard():
     for i in range(boardSize):
         bitBoard.append([])
         board.append([])
+        changed.append([])
         for j in range(boardSize):
             bitBoard[i].append(0)
             board[i].append( tk.Button(gFrame, image=blackImg,
                 command=lambda a=i, b=j : toggleFace(a,b)) )
             board[i][j].grid(row=i, column=j)
+            changed[i].append(False)
     prevBoard = bitBoard
 
 def destroyBoard():
+    # global board
+    # global bitBoard
+    # global changed
     p.destroy()
 
+    # board = []
+    # bitBoard = []
+    # changed = []
     for i in range(boardSize):
         for j in range(boardSize):
             board[0][0].destroy()
-            board[0].pop(0)
-            bitBoard[0].pop(0)
-        board.pop(0)
-        bitBoard.pop(0)
+            del board[0][0]
+            del bitBoard[0][0]
+            del changed[0][0]
+            # board[0].pop(0)
+            # bitBoard[0].pop(0)
+        del board[0]
+        del bitBoard[0]
+        del changed[0]
+        # board.pop(0)
+        # bitBoard.pop(0)
             
 def submitSize(x):
     global boardSize
@@ -339,6 +356,7 @@ if __name__ == '__main__':
 
     # Build game board
     bitBoard = []
+    changed = []
     board = []
     chord = []
     buildBoard()

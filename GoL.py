@@ -19,7 +19,7 @@ def modSort(arr):
 
     return result
 
-def nextStep(board, n, numNotes, randMel):
+def nextStep(board, changed, n, numNotes, randMel):
     neighbors = 0
     playCurr = -1
     newBoard = []
@@ -68,6 +68,7 @@ def nextStep(board, n, numNotes, randMel):
                     rowCount[-1] += 1
                 else:
                     newBoard[i].append(0)
+            changed[i][j] = False if (board[i][j] == newBoard[i][j]) else True
         
         if(playCurr > -1):
             playNotes.append([i,playCurr])
