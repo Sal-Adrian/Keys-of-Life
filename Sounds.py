@@ -41,7 +41,7 @@ def createScale(n, scale, dec):
 
             return arr
 
-def createNotes(n, dist, fret):
+def createNotes(n, dist, fret, key):
     # Create strings
     strings = []
     if(isinstance(dist, str)):
@@ -68,7 +68,7 @@ def createNotes(n, dist, fret):
     for i in range(n):
         noteBoard.append([])
         for j in range(n):
-            note = 60 + strings[i] + fretboard[j]
+            note = 60 + strings[i] + fretboard[j] + key
             if(note < 0):
                 print("Warning: Some notes were less than 0")
                 noteBoard[i].append(0)
@@ -83,10 +83,11 @@ def createNotes(n, dist, fret):
     return noteBoard
 
 class Sounds:
-    def __init__(self, n, dist, fret):
+    def __init__(self, n, dist, fret, key):
         self.n = n
+        self.key = key
         self.vol = 75
-        self.boardNotes = createNotes(n, dist, fret)
+        self.boardNotes = createNotes(n, dist, fret, key)
         
         md.init()
         self.player = md.Output(0)
@@ -110,8 +111,17 @@ class Sounds:
     def getBoardNotes(self):
         return self.boardNotes
     
+    def setKey(self, n, key, keyChng):
+        self.key = key - 3
+        for i in range(n):
+            for j in range(n):
+                self.boardNotes[i][j] += keyChng
+        print("----------------------")
+        for i in self.boardNotes:
+            print(i)
+
     def setBoardNotes(self, n, dist, fret):
-        self.boardNotes = createNotes(n, dist, fret)
+        self.boardNotes = createNotes(n, dist, fret, self.key)
 
     def setVol(self, v):
         self.vol = v

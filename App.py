@@ -102,7 +102,7 @@ def submitSize(x):
         boardSize = val
         strSize.set(boardSize)
         buildBoard()
-        p = s.Sounds(boardSize, dist, fret)
+        p = s.Sounds(boardSize, dist, fret, prevKey-3)
         boardNotes = p.getBoardNotes()
         setInstr(instrBox.get())
 
@@ -182,6 +182,12 @@ def chngDistSel():
         dScaleBox.config(state='normal')
         setDistScale(0)
 
+def setDistKey(x):
+    global prevKey
+    currKey = keyList.index(keyBox.get())
+    p.setKey(boardSize, currKey, currKey - prevKey)
+    prevKey = currKey
+
 def setDistScale(x):
     global dist
     dist = dScaleBox.get()
@@ -244,7 +250,8 @@ if __name__ == '__main__':
 
     dist = "Pentatonic"
     fret = 0
-    p = s.Sounds(boardSize, dist, fret)
+    prevKey = 3
+    p = s.Sounds(boardSize, dist, fret, prevKey-3)
     boardNotes = p.getBoardNotes()
     
 
@@ -399,6 +406,18 @@ if __name__ == '__main__':
     eFrame2.pack()
 
     scaleList = ["Pentatonic"]
+    keyList = ["A", "#A", "B", "C", "#C", "D", "#D", "E", "F", "#F", "G", "#G"]
+    # GET key
+    keyHeader = ttk.Label(eFrame2, text="Key:")
+    key = ttk.StringVar()
+    keyBox = ttk.Combobox(eFrame2, width=2, textvariable=key,
+        values=keyList)
+    keyBox.bind('<<ComboboxSelected>>', setDistKey)
+    keyBox.current(3)
+
+    keyHeader.grid(row=0, column=4)
+    keyBox.grid(row=0, column=5)
+
     # GET string distance
     distSelect = ttk.StringVar(eFrame2, 0)
     distHeader = ttk.Label(eFrame2, text="String:")
@@ -420,13 +439,13 @@ if __name__ == '__main__':
     distBuffer = ttk.Label(eFrame2, text=" | ")
     distLabel = ttk.Label(eFrame2, textvariable=strDist)
 
-    distHeader.grid(row=0, column=1)
-    distRad1.grid(row=1, column=0, sticky='w')
-    dScaleBox.grid(row=1, column=1, columnspan=3)
-    distRad2.grid(row=2, column=0, sticky='w', pady=(0, 30))
-    distField.grid(row=2, column=1, pady=(0, 30))
-    distBuffer.grid(row=2, column=2, pady=(0, 30))
-    distLabel.grid(row=2, column=3, pady=(0, 30))
+    distHeader.grid(row=1, column=1)
+    distRad1.grid(row=2, column=0, sticky='w')
+    dScaleBox.grid(row=2, column=1, columnspan=3)
+    distRad2.grid(row=3, column=0, sticky='w', pady=(0, 30))
+    distField.grid(row=3, column=1, pady=(0, 30))
+    distBuffer.grid(row=3, column=2, pady=(0, 30))
+    distLabel.grid(row=3, column=3, pady=(0, 30))
     distField.bind("<Return>", submitDist)
 
     # GET fret distance
@@ -450,13 +469,13 @@ if __name__ == '__main__':
     fretBuffer = ttk.Label(eFrame2, text=" | ")
     fretLabel = ttk.Label(eFrame2, textvariable=strFret)
 
-    fretHeader.grid(row=0, column=8, padx=(50,0))
-    fretRad1.grid(row=1, column=7, sticky='w', padx=(50,0))
-    fScaleBox.grid(row=1, column=8, columnspan=3)
-    fretRad2.grid(row=2, column=7, sticky='w', padx=(50,0), pady=(0, 30))
-    fretField.grid(row=2, column=8, pady=(0, 30))
-    fretBuffer.grid(row=2, column=9, pady=(0, 30))
-    fretLabel.grid(row=2, column=10, pady=(0, 30))
+    fretHeader.grid(row=1, column=8)#, padx=(50,0))
+    fretRad1.grid(row=2, column=7, sticky='w')#, padx=(50,0))
+    fScaleBox.grid(row=2, column=8, columnspan=3)
+    fretRad2.grid(row=3, column=7, sticky='w', pady=(0, 30))#, padx=(50,0))
+    fretField.grid(row=3, column=8, pady=(0, 30))
+    fretBuffer.grid(row=3, column=9, pady=(0, 30))
+    fretLabel.grid(row=3, column=10, pady=(0, 30))
     fretField.bind("<Return>", submitFret)
 
 
