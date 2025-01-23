@@ -37,7 +37,7 @@ def loadBoard():
             else:
                 board[i][j].config(image=blueImg)
                 # bitBoard[i][j] = 1
-                chord.append([i,j])
+                chord.append(p.getBoardNote(i,j))
 
 def oneStep():
     global bitBoard
@@ -89,7 +89,7 @@ def submitSize(x):
     global boardSize
     global playing
     global p
-    global boardNotes
+    # global boardNotes
     try:
         val = int(sizeField.get())
     except ValueError:
@@ -103,7 +103,7 @@ def submitSize(x):
         strSize.set(boardSize)
         buildBoard()
         p = s.Sounds(boardSize, dist, fret, prevKey-3)
-        boardNotes = p.getBoardNotes()
+        # boardNotes = p.getBoardNotes()
         setInstr(instrBox.get())
 
 def submitBPM(x):
@@ -213,7 +213,7 @@ def setFretScale(x):
 def submitDist(x):
     global dist
     global p
-    global boardNotes
+    # global boardNotes
     try:
         val = int(distField.get())
     except ValueError:
@@ -228,7 +228,7 @@ def submitDist(x):
 def submitFret(x):
     global fret
     global p
-    global boardNotes
+    # global boardNotes
     try:
         val = int(fretField.get())
     except ValueError:
@@ -252,7 +252,7 @@ if __name__ == '__main__':
     fret = 0
     prevKey = 3
     p = s.Sounds(boardSize, dist, fret, prevKey-3)
-    boardNotes = p.getBoardNotes()
+    # boardNotes = p.getBoardNotes()
     
 
     root = ttk.Window(themename='darkly')

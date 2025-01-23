@@ -95,11 +95,13 @@ class Sounds:
 
     def playChords(self, chord):
         for i in chord:
-            self.player.note_on(self.boardNotes[i[0]][i[1]], self.vol)
+            # self.player.note_on(self.boardNotes[i[0]][i[1]], self.vol)
+            self.player.note_on(i, self.vol)
 
     def stopChords(self, chord):
         for i in chord:
-            self.player.note_off(self.boardNotes[i[0]][i[1]], 0)
+            # self.player.note_off(self.boardNotes[i[0]][i[1]], 0)
+            self.player.note_off(i, 0)
 
     def destroy(self):
         md.quit()
@@ -108,8 +110,8 @@ class Sounds:
     def setInstr(self, i):
         self.player.set_instrument(int(i))
 
-    def getBoardNotes(self):
-        return self.boardNotes
+    def getBoardNote(self, i, j):
+        return self.boardNotes[i][j]
     
     def setKey(self, n, key, keyChng):
         self.key = key - 3
