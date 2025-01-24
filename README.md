@@ -20,3 +20,9 @@ By default, the row with the most live tiles will play thier note.
 The "Random" checkbox negates this priority.
 
 "Go Back" button loads board configuration since the last time "Play" button was pressed.
+
+### Recommendations:
+
+Don't have too many notes playing at once. I suggest keeping it less than 6.
+
+"Insen" Scale: Turn on "Random"

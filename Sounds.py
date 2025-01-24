@@ -21,22 +21,56 @@ def createScale(n, scale, dec):
                 curr += 9 if dec else -10
 
             for i in range(n):
-                if(dec):
-                    if(note < 0):
+                if(note < 0):
                         note = 4
+                if(dec):
                     if(note == 0 or note == 3):
                         curr -= 3
                     else:
                         curr -= 2
-                    note -= 1
                 else:
-                    if(note > 4):
-                        note = 0
-                    if(note == 2 or note == 4):
+                    if(note == 1 or note == 3):
                         curr += 3
                     else:
                         curr += 2
-                    note += 1
+                note -= 1
+                arr.append(curr)   
+
+            return arr
+        case "Insen":
+            arr = []
+            curr = int(n / 2)
+            note = curr % 5
+            octave = 12*int(curr/5)
+            curr = octave if dec else -octave
+
+            if(note == 1):
+                curr += 4 if dec else -1
+            elif(note == 2):
+                curr += 6 if dec else -3
+            elif(note == 3):
+                curr += 9 if dec else -6
+            elif(note == 4):
+                curr += 11 if dec else -8
+
+            for i in range(n):
+                if(note < 0):
+                    note = 4
+                if(dec):
+                    curr -= 1
+                    if(note == 1):
+                        curr -= 3
+                    elif(note > 1):
+                        curr -= 1
+                        if(note == 3):
+                            curr -= 1
+                else:
+                    curr += note
+                    if(note == 0):
+                        curr += 4
+                    elif(note == 4):
+                        curr -= 2
+                note -= 1
                 arr.append(curr)   
 
             return arr
@@ -78,6 +112,7 @@ def createNotes(n, dist, fret, key):
             else:
                 noteBoard[i].append(note)
 
+    print()
     for i in noteBoard:
         print(i)
     return noteBoard

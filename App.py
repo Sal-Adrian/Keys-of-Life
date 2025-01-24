@@ -405,7 +405,7 @@ if __name__ == '__main__':
     eFrame2 = ttk.Frame(innerFrame)
     eFrame2.pack()
 
-    scaleList = ["Pentatonic"]
+    scaleList = ["Pentatonic", "Insen"]
     keyList = ["A", "#A", "B", "C", "#C", "D", "#D", "E", "F", "#F", "G", "#G"]
     # GET key
     keyHeader = ttk.Label(eFrame2, text="Key:")
