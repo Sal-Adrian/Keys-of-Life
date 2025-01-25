@@ -25,4 +25,4 @@ The "Random" checkbox negates this priority.
 
 Don't have too many notes playing at once. I suggest keeping it less than 6.
 
-"Insen" Scale: Turn on "Random"
+"Insen" & "In" Scale: Turn on "Random"

@@ -3,14 +3,13 @@ import pygame.midi as md
 # dec:  False = Fret
 #       True = String
 def createScale(n, scale, dec):
+    arr = []
+    curr = int(n / 2)
+    note = curr % 5
+    octave = 12*int(curr/5)
+    curr = octave if dec else -octave
     match scale:
         case "Pentatonic":
-            arr = []
-            curr = int(n / 2)
-            note = curr % 5
-            octave = 12*int(curr/5)
-            curr = octave if dec else -octave
-
             if(note == 1):
                 curr += 2 if dec else -3
             elif(note == 2):
@@ -36,14 +35,8 @@ def createScale(n, scale, dec):
                 note -= 1
                 arr.append(curr)   
 
-            return arr
+            # return arr
         case "Insen":
-            arr = []
-            curr = int(n / 2)
-            note = curr % 5
-            octave = 12*int(curr/5)
-            curr = octave if dec else -octave
-
             if(note == 1):
                 curr += 4 if dec else -1
             elif(note == 2):
@@ -73,7 +66,36 @@ def createScale(n, scale, dec):
                 note -= 1
                 arr.append(curr)   
 
-            return arr
+        case "In":
+            if(note == 1):
+                curr += 4 if dec else -1
+            elif(note == 2):
+                curr += 6 if dec else -5
+            elif(note == 3):
+                curr += 7 if dec else -6
+            elif(note == 4):
+                curr += 11 if dec else -8
+
+            for i in range(n):
+                if(note < 0):
+                    note = 4
+                if(dec):
+                    curr -= 1
+                    if(note == 1 or note == 4):
+                        curr -= 3
+                    elif(note == 2):
+                        curr -= 1
+                else:
+                    if(note % 2 == 1):
+                        curr += 1
+                    elif(note < 4):
+                        curr += 4
+                    else:
+                        curr += 2
+                note -= 1
+                arr.append(curr)   
+
+    return arr
 
 def createNotes(n, dist, fret, key):
     # Create strings
