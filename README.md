@@ -1,3 +1,5 @@
+<img src="Images/KoL.png" alt="KoL" width="350"/>
+
 # Run App.py:
 Through terminal or just double click application.
 
