@@ -152,9 +152,15 @@ def togglePlayer():
 
 def goBack():
     global bitBoard
+
+    p.stopChords(chord)
+    for i in range(boardSize):
+        for j in range(boardSize):
+            changed[i][j] = 1  if(bitBoard[i][j] != prevBoard[i][j]) else 0
     bitBoard = prevBoard
-    if(not playing):
-        loadBoard()
+    loadBoard()
+    if(playing):
+        p.playChords(chord)
 
 def clearBoard():
     for i in range(boardSize):
