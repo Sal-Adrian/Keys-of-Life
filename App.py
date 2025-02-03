@@ -14,7 +14,7 @@ def stepLoop():
     global bitBoard
     if(playing):
         p.stopChords(chord)
-        bitBoard = nextStep(bitBoard, changed, boardSize, numNotes, randMel.get())
+        bitBoard = nextStep(bitBoard, changed, boardSize, chordSize, randMel.get())
         loadBoard()
         p.setVol(vol.get())
         p.playChords(chord)
@@ -41,7 +41,7 @@ def loadBoard():
 
 def oneStep():
     global bitBoard
-    bitBoard = nextStep(bitBoard, changed, boardSize, numNotes, randMel.get())
+    bitBoard = nextStep(bitBoard, changed, boardSize, chordSize, randMel.get())
     loadBoard()
 
 def buildBoard():
@@ -95,7 +95,7 @@ def submitSize(x):
     except ValueError:
         return
 
-    if(val > 2 and val < 26):
+    if(val > 2 and val < 31):
         if(playing):
             togglePlayer()
         destroyBoard()
@@ -119,14 +119,14 @@ def submitBPM(x):
         strBPM.set(val)
 
 def submitNum(x):
-    global numNotes
+    global chordSize
     try:
         val = int(numField.get())
     except ValueError:
         return
     
     if(val >= -1 and val <= boardSize):
-        numNotes = val
+        chordSize = val
         strNum.set(val)
 
 def toggleFace(i, j):
@@ -248,11 +248,11 @@ def submitFret(x):
 
 
 if __name__ == '__main__':
-    boardSize = 10  # App gets weird/breaks when size is too big
-    if(boardSize < 3 or boardSize > 25): 
-        exit()
+    # App gets weird/breaks when size is too big
+    boardSize = 10
+    
     timeStep = 500  # 120 bpm
-    numNotes = 3
+    chordSize = 3
 
     dist = "Pentatonic"
     fret = 0
@@ -312,7 +312,7 @@ if __name__ == '__main__':
     bpmField.bind("<Return>", submitBPM)
 
     # GET amount of notes
-    strNum = ttk.StringVar(eFrame, numNotes)
+    strNum = ttk.StringVar(eFrame, chordSize)
     numHeader = ttk.Label(eFrame, text="Max Notes:")
     numField = ttk.Entry(eFrame, width=5)
     numBuffer = ttk.Label(eFrame, text=" | ")

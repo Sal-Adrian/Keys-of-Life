@@ -10,7 +10,7 @@ Through terminal or just double click application.
 - pygame
 
 ## Miscellaneous:
-Board Length: 	1-25
+Board Length: 	3-30
 
 BPM:		1-300
 

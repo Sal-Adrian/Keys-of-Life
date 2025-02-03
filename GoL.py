@@ -19,7 +19,7 @@ def modSort(arr):
 
     return result
 
-def nextStep(board, changed, n, numNotes, randMel):
+def nextStep(board, changed, n, chordSize, randMel):
     neighbors = 0
     playCurr = -1
     newBoard = []
@@ -79,16 +79,16 @@ def nextStep(board, changed, n, numNotes, randMel):
             rowCount.pop(-1)
         playCurr = -1
 
-    if(numNotes > -1):
+    if(chordSize > -1):
         if(randMel == 0):
             rowCount = modSort(rowCount)
             newPN = []
 
-            for i in range(min(numNotes, len(playNotes))):
+            for i in range(min(chordSize, len(playNotes))):
                 newPN.append(playNotes[rowCount[i]])
             playNotes = newPN
         else:
-            while len(playNotes) > numNotes:
+            while len(playNotes) > chordSize:
                     playNotes.pop(randrange(len(playNotes)))
 
     # Set the notes that sing to 2
