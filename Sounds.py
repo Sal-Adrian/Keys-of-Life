@@ -97,17 +97,17 @@ def createScale(n, scale, dec):
 
     return arr
 
-def createNotes(n, dist, fret, key):
+def createNotes(n, semi, fret, key):
     # Create strings
     strings = []
-    if(isinstance(dist, str)):
-        strings = createScale(n, dist, True)
+    if(isinstance(semi, str)):
+        strings = createScale(n, semi, True)
     else:
         curr = int(n / 2) 
-        curr *= dist
+        curr *= semi
         for i in range(n):
             strings.append(curr)
-            curr -= dist
+            curr -= semi
     
     # Create Fretboard
     fretboard = []
@@ -140,11 +140,11 @@ def createNotes(n, dist, fret, key):
     return noteBoard
 
 class Sounds:
-    def __init__(self, n, dist, fret, key):
+    def __init__(self, n, semi, fret, key):
         self.n = n
         self.key = key
         self.vol = 75
-        self.boardNotes = createNotes(n, dist, fret, key)
+        self.boardNotes = createNotes(n, semi, fret, key)
         
         md.init()
         self.player = md.Output(0)
@@ -179,8 +179,8 @@ class Sounds:
         for i in self.boardNotes:
             print(i)
 
-    def setBoardNotes(self, n, dist, fret):
-        self.boardNotes = createNotes(n, dist, fret, self.key)
+    def setBoardNotes(self, n, semi, fret):
+        self.boardNotes = createNotes(n, semi, fret, self.key)
 
     def setVol(self, v):
         self.vol = v

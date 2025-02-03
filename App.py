@@ -102,7 +102,7 @@ def submitSize(x):
         boardSize = val
         strSize.set(boardSize)
         buildBoard()
-        p = s.Sounds(boardSize, dist, fret, prevKey-3)
+        p = s.Sounds(boardSize, semi, fret, prevKey-3)
         # boardNotes = p.getBoardNotes()
         setInstr(instrBox.get())
 
@@ -177,27 +177,27 @@ def randomBoard():
 def setInstr(e):
     p.setInstr(instrBox.get())
 
-def chngDistSel():
-    val = int(distSelect.get())
+def chngSemiSel():
+    val = int(semiSelect.get())
     if(val):
-        distField.config(state='normal')
-        dScaleBox.config(state='disabled')
-        submitDist(0)
+        semiField.config(state='normal')
+        sScaleBox.config(state='disabled')
+        submitSemi(0)
     else:
-        distField.config(state='disabled')
-        dScaleBox.config(state='normal')
-        setDistScale(0)
+        semiField.config(state='disabled')
+        sScaleBox.config(state='normal')
+        setSemiScale(0)
 
-def setDistKey(x):
+def setSemiKey(x):
     global prevKey
     currKey = keyList.index(keyBox.get())
     p.setKey(boardSize, currKey, currKey - prevKey)
     prevKey = currKey
 
-def setDistScale(x):
-    global dist
-    dist = dScaleBox.get()
-    p.setBoardNotes(boardSize, dist, fret)
+def setSemiScale(x):
+    global semi
+    semi = sScaleBox.get()
+    p.setBoardNotes(boardSize, semi, fret)
 
 def chngFretSel():
     val = int(fretSelect.get())
@@ -214,22 +214,22 @@ def chngFretSel():
 def setFretScale(x):
     global fret
     fret = fScaleBox.get()
-    p.setBoardNotes(boardSize, dist, fret)
+    p.setBoardNotes(boardSize, semi, fret)
 
-def submitDist(x):
-    global dist
+def submitSemi(x):
+    global semi
     global p
     # global boardNotes
     try:
-        val = int(distField.get())
+        val = int(semiField.get())
     except ValueError:
         return
 
     # Arbitrarily set max to 12
     if(val >= 0 and val <= 12):
-        dist = val
-        strDist.set(val)
-        p.setBoardNotes(boardSize, dist, fret)
+        semi = val
+        strSemi.set(val)
+        p.setBoardNotes(boardSize, semi, fret)
 
 def submitFret(x):
     global fret
@@ -244,7 +244,7 @@ def submitFret(x):
     if(val >= 0 and val <= 12):
         fret = val
         strFret.set(val)
-        p.setBoardNotes(boardSize, dist, fret)
+        p.setBoardNotes(boardSize, semi, fret)
 
 
 if __name__ == '__main__':
@@ -254,10 +254,10 @@ if __name__ == '__main__':
     timeStep = 500  # 120 bpm
     chordSize = 3
 
-    dist = "Pentatonic"
+    semi = "Pentatonic"
     fret = 0
     prevKey = 3
-    p = s.Sounds(boardSize, dist, fret, prevKey-3)
+    p = s.Sounds(boardSize, semi, fret, prevKey-3)
     # boardNotes = p.getBoardNotes()
     
 
@@ -418,43 +418,43 @@ if __name__ == '__main__':
     key = ttk.StringVar()
     keyBox = ttk.Combobox(eFrame2, width=2, textvariable=key,
         values=keyList)
-    keyBox.bind('<<ComboboxSelected>>', setDistKey)
+    keyBox.bind('<<ComboboxSelected>>', setSemiKey)
     keyBox.current(3)
 
     keyHeader.grid(row=0, column=4)
     keyBox.grid(row=0, column=5)
 
-    # GET string distance
-    distSelect = ttk.StringVar(eFrame2, 0)
-    distHeader = ttk.Label(eFrame2, text="String:")
-    distRad1 = ttk.Radiobutton(eFrame2, text="Scale:", 
-        command=chngDistSel, variable=distSelect, value=0)        
+    # GET string semitones
+    semiSelect = ttk.StringVar(eFrame2, 0)
+    semiHeader = ttk.Label(eFrame2, text="String:")
+    semiRad1 = ttk.Radiobutton(eFrame2, text="Scale:", 
+        command=chngSemiSel, variable=semiSelect, value=0)        
 
-    dScale = ttk.StringVar() 
-    dScaleBox = ttk.Combobox(eFrame2, width=10, textvariable=dScale,
+    sScale = ttk.StringVar() 
+    sScaleBox = ttk.Combobox(eFrame2, width=10, textvariable=sScale,
         values=scaleList)
-    dScaleBox.bind('<<ComboboxSelected>>', setDistScale)
-    dScaleBox.current(0)
+    sScaleBox.bind('<<ComboboxSelected>>', setSemiScale)
+    sScaleBox.current(0)
 
-    strDist = ttk.StringVar(eFrame2, 2)
-    distRad2 = ttk.Radiobutton(eFrame2, text="Interval:",
-        command=chngDistSel, variable=distSelect, value=1)
-    distField = ttk.Entry(eFrame2, width=5)
-    distField.insert(0, "2")
-    distField.config(state='disabled')
-    distBuffer = ttk.Label(eFrame2, text=" | ")
-    distLabel = ttk.Label(eFrame2, textvariable=strDist)
+    strSemi = ttk.StringVar(eFrame2, 2)
+    semiRad2 = ttk.Radiobutton(eFrame2, text="Interval:",
+        command=chngSemiSel, variable=semiSelect, value=1)
+    semiField = ttk.Entry(eFrame2, width=5)
+    semiField.insert(0, "2")
+    semiField.config(state='disabled')
+    semiBuffer = ttk.Label(eFrame2, text=" | ")
+    semiLabel = ttk.Label(eFrame2, textvariable=strSemi)
 
-    distHeader.grid(row=1, column=1)
-    distRad1.grid(row=2, column=0, sticky='w')
-    dScaleBox.grid(row=2, column=1, columnspan=3)
-    distRad2.grid(row=3, column=0, sticky='w', pady=(0, 30))
-    distField.grid(row=3, column=1, pady=(0, 30))
-    distBuffer.grid(row=3, column=2, pady=(0, 30))
-    distLabel.grid(row=3, column=3, pady=(0, 30))
-    distField.bind("<Return>", submitDist)
+    semiHeader.grid(row=1, column=1)
+    semiRad1.grid(row=2, column=0, sticky='w')
+    sScaleBox.grid(row=2, column=1, columnspan=3)
+    semiRad2.grid(row=3, column=0, sticky='w', pady=(0, 30))
+    semiField.grid(row=3, column=1, pady=(0, 30))
+    semiBuffer.grid(row=3, column=2, pady=(0, 30))
+    semiLabel.grid(row=3, column=3, pady=(0, 30))
+    semiField.bind("<Return>", submitSemi)
 
-    # GET fret distance
+    # GET fret semitones
     fretSelect = ttk.StringVar(eFrame2, 1)
     fretHeader = ttk.Label(eFrame2, text="Fret:")
     fretRad1 = ttk.Radiobutton(eFrame2, text="Scale:",
