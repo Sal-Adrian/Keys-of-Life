@@ -1,20 +1,27 @@
-<img src="Images/KoL.png" alt="KoL" width="350"/>
 
-# Run App.py:
-Through terminal or just double click application.
+# Keys of Life
+Conway's Game of Life, except the tiles play a little song. A small project that mixes cellular automata and generative music.
 
-# Requires:
-- tkinter
-- ttkbootstrap
-- PIL
-- pygame
+## Demo
+
+
+
+
+## Run `App.py`
+
+### Requires:
+- `tkinter`
+- `ttkbootstrap`
+- `PIL`
+- `pygame`
 
 ## Miscellaneous:
-Board Length: 	3-30
 
-BPM:		1-300
-
-Max. Notes:	>= -1
+| | |
+| --- | --- |
+| Board Length: | 3-30 |
+| BPM: | 1-300 |
+| Max Notes: | $\geq$ -1 |
 
 When Max Notes = -1, all possible notes will play.
 
@@ -25,6 +32,6 @@ The "Random" checkbox negates this priority.
 
 ### Recommendations:
 
-Don't have too many notes playing at once. I suggest keeping it less than 6.
+Don't have too many notes playing at once. It sounds annoying. I suggest keeping it less than 6.
 
-"Insen" & "In" Scale: Turn on "Random"
+Turning "Random" on when "Insen" & "In" Scale are selected sounds nice.
