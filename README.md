@@ -4,7 +4,7 @@ Conway's Game of Life, except the tiles play a little song. A small project that
 
 ## Demo
 
-
+https://github.com/user-attachments/assets/59b1ad56-5020-48a2-9cf9-1455de6c9989
 
 
 ## Run `App.py`
